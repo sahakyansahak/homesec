@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="Jozef Dvorský - creatingo.com">
+
+	<title>Home</title>
+
+	<!-- Bootstrap core CSS with custom theme variables + Additional theme styles -->
+    <link href="static/assets/css/iot-theme-bundle.min.css" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+</head>
+
+<body>
+	<form id="log" action="log"></form>
+	<form id="clim" action="climate"></form>
+	<form id="cam" action="camera"></form>
+	<form id="gps" action="gps"></form>
+	<!-- Preloader START -->
+	<div id="iot-preloader">
+		<div class="center-preloader d-flex align-items-center">
+			<div class="spinners">
+				<div class="spinner01"></div>
+				<div class="spinner02"></div>
+			</div>
+		</div>
+	</div>
+	<!-- Preloader END -->
+
+	<!-- Alerts Modal START -->
+	<div class="modal modal-nobg centered fade" id="alertsModal" tabindex="-1" role="dialog" aria-label="Alerts" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="alert alert-danger alert-dismissible fade show border-0" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button> Security SW update available
+					</div>
+					<div class="alert alert-warning alert-dismissible fade show border-0" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button> New device recognized
+					</div>
+					<div class="alert alert-warning alert-dismissible fade show border-0" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button> User profile is not complete
+					</div>
+				</div>
+			</div>
+		</div>
+		<button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
+      		<span aria-hidden="true">&times;</span>
+    	</button>
+	</div>
+
+
+	<div id="box" class="box" tabindex="-1" role="dialog" aria-hidden="true">
+
+		<button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close" onclick="admin_op()">
+      		<span aria-hidden="true">&times;</span>
+    	</button>
+    <form method="POST" enctype="multipart/form-data" action="{{ url_for('new_us') }}">
+    <div class="modal modal-nobg centered fade show" style="display: block;" id="alertsModal" tabindex="-1" role="dialog" aria-label="Alerts" aria-hidden="true">
+
+		<div class="modal-dialog" role="document">
+
+				<div class="modal-content">
+						
+				<div class="modal-body">
+					<h2>Add User</h2>
+					<div class="alert alert-dismissible fade show border-0" role="alert">
+						<input type="text" class="form-control" placeholder="Username" name="uname" aria-label="Username" aria-describedby="basic-addon1">
+					</div>
+					<div class="alert alert-dismissible fade show border-0" role="alert">
+						<input type="text" class="form-control" placeholder="Card ID" name="card" aria-label="Username" aria-describedby="basic-addon1">
+					</div>
+					<div class="alert alert-dismissible fade show border-0" role="alert">
+						<input type="text" class="form-control" placeholder="Password" name="pass" aria-label="Username" aria-describedby="basic-addon1">
+					</div>
+					<div class="alert alert-dismissible fade show border-0" role="alert">
+						<input type="file" class="custom-file-input" name="file[]" multiple="">
+					</div>
+					<div class="alert alert-dismissible fade show border-0" role="alert">
+						<input type="submit" class="regist_butt btn btn-link nav-link" value="Register">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</form>
+	</div>
+
+	<!-- Alerts Modal END -->
+
+	<!-- Arming Modal START -->
+	<div class="modal modal-warning centered fade" id="armModal" tabindex="-1" role="dialog" aria-label="Arming" aria-hidden="true">
+		<div class="modal-dialog modal-sm" role="document">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div id="armTimer">
+						<h3 class="font-weight-bold">EXIT NOW! <span class="timer font-weight-normal"></span></h3>
+					</div>
+				</div>
+			</div>
+		</div>
+		<button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<!-- Arming Modal END -->
+
+	<!-- Arming Modal with key START -->
+	<div class="modal modal-nobg centered fade" id="armModalPIN" tabindex="-1" role="dialog" aria-label="Arming/Disarming" aria-hidden="true" data-backdrop="static">
+		<div class="modal-dialog modal-sm" role="document">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="keyboard">
+						<div class="row">
+							<div class="col-12 p-2">
+								<h3 id="hidden-key">&nbsp;</h3>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-4 p-2">
+								<button data-action="enter-key" type="button" class="btn btn-outline-primary btn-lg">1</button>
+							</div>
+							<div class="col-4 p-2">
+								<button data-action="enter-key" type="button" class="btn btn-outline-primary btn-lg">2</button>
+							</div>
+							<div class="col-4 p-2">
+								<button data-action="enter-key" type="button" class="btn btn-outline-primary btn-lg">3</button>
+							</div>
+							<div class="col-4 p-2">
+								<button data-action="enter-key" type="button" class="btn btn-outline-primary btn-lg">4</button>
+							</div>
+							<div class="col-4 p-2">
+								<button data-action="enter-key" type="button" class="btn btn-outline-primary btn-lg">5</button>
+							</div>
+							<div class="col-4 p-2">
+								<button data-action="enter-key" type="button" class="btn btn-outline-primary btn-lg">6</button>
+							</div>
+							<div class="col-4 p-2">
+								<button data-action="enter-key" type="button" class="btn btn-outline-primary btn-lg">7</button>
+							</div>
+							<div class="col-4 p-2">
+								<button data-action="enter-key" type="button" class="btn btn-outline-primary btn-lg">8</button>
+							</div>
+							<div class="col-4 p-2">
+								<button data-action="enter-key" type="button" class="btn btn-outline-primary btn-lg">9</button>
+							</div>
+							<div class="col-4 p-2">
+								<button data-action="enter-key" type="button" class="btn btn-outline-primary btn-lg">0</button>
+							</div>
+							<div class="col-8 p-2">
+								<button data-action="clear-key" type="button" class="btn btn-outline-secondary btn-lg w-100">CLEAR</button>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12 p-2">
+								<p class="">Enter any 4 numbers :)</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<button id="cancel-keyboard" type="button" class="close close-modal">
+			<span>&times;</span>
+		</button>
+	</div>
+	<!-- Arming Modal with key END -->
+
+	<!-- Alarm Modal START -->
+	<div class="modal modal-danger centered fade" id="alarmModal" tabindex="-1" role="dialog" aria-label="ALARM" aria-hidden="true" data-backdrop="static">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" data-dismiss="modal">
+				<div class="modal-body d-flex">
+					<svg class="icon-sprite icon-2x icon-pulse">
+						<svg viewBox="0 0 64 64">
+						  <title>Alarm</title>
+						  <desc>Alarm symbol</desc>
+						  <g fill="currentColor">
+						    <rect x="7" y="27" width="8" height="2"/>
+						    <rect x="49" y="27" width="8" height="2"/>
+						    <rect x="31" y="3" width="2" height="8"/>
+						    <path d="M47.2,20.4l6.9-4l-1-1.7l-6.9,4L47.2,20.4z"/>
+						    <path d="M41.4,13.8l4-6.9l-1.7-1l-4,6.9L41.4,13.8z"/>
+						    <path d="M24.4,12.8l-4-6.9l-1.7,1l4,6.9L24.4,12.8z"/>
+						    <path d="M17.8,18.6l-6.9-4l-1,1.7l6.9,4L17.8,18.6z"/>
+						    <path d="M13,52v-5c0-2.2,1.8-4,4-4h30c2.2,0,4,1.8,4,4v5H13z"/>
+						    <path d="M32,14c-7.7,0-14,6.3-14,14v13h17V28c0-1.7,1.3-3,3-3s3,1.3,3,3v13h5V28C46,20.3,39.7,14,32,14z"/>
+						  </g>
+					</svg></svg>
+					<h3 class="text-right font-weight-bold ml-auto align-self-center">MOTION DETECTED!</h3>
+				</div>
+			</div>
+			<p class="mt-2 text-center text-danger">Click the red area to accept/close message</p>
+		</div>
+	</div>
+	<!-- Alarm Modal END -->
+
+	<!-- Fire Alarm Modal START -->
+	<div class="modal modal-danger centered fade" id="fire-alarmModal" tabindex="-1" role="dialog" aria-label="FIRE ALARM" aria-hidden="true" data-backdrop="static">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content" data-dismiss="modal">
+				<div class="modal-body d-flex">
+					<svg class="icon-sprite icon-2x icon-pulse">
+						<svg viewBox="0 0 64 64">
+						  <title>Fire</title>
+						  <desc>Fire symbol</desc>
+						  <g fill="currentColor">
+						    <path d="M52,32c-1.58-3.95-4.58-5.83-2-14c-2.56-0.45-7.22,1.14-10,5c-4.46-4.78-7-11-6-18c-6,4-12,11-10,24c-3-6-7.57-6.92-12-7
+								c2.36,3.83,3.76,8.94,1,12c-1.81,2-8.23,18,15.15,18c-4.49-1.99-7.05-6.81-3.15-13c0.57,2.13,2.67,3.62,4,3
+								c3.69-1.71,3.56-8.19,3-12c4,3,5,7,3.9,10.36C39,39,39.18,38.19,40,35c4.86,6.48,2.5,14.27-2.83,17C57,52,54,37,52,32z"/>
+						  </g>
+					</svg></svg>
+					<h3 class="text-right font-weight-bold ml-auto align-self-center">SMOKE DETECTED!</h3>
+				</div>
+			</div>
+			<p class="mt-2 text-center text-danger">Click the red area to accept/close message</p>
+		</div>
+	</div>
+	<!-- Fire Alarm Modal END -->
+
+	<!-- Wrapper START -->
+	<div id="wrapper" class="hidden">
+
+		<!-- Top navbar START -->
+		<nav class="navbar fixed-top border-bottom">
+			<a class="navbar-brand pt-0 px-lg-3 px-1 mr-0" href="#"><img src="assets/images/symbiot-delta.svg" alt="SYMBIOT Delta"></a>
+			<div class="ml-auto">
+				<div class="navbar-nav navbar-icons flex-row">
+					<div class="nav-item">
+						<button onclick="document.getElementById('gps').submit();"  class="btn btn-link nav-link" title="Alerts" type="button" data-alerts="3" data-toggle="modal" >
+							<div style="height: 4px;"></div>
+							<img style="width: 22px;" src="static/assets/images/compass.png">
+						</button>
+					</div>
+					<div class="nav-item">
+						<button id="alerts-toggler" class="btn btn-link nav-link" title="Alerts" type="button" data-alerts="3" data-toggle="modal" data-target="#alertsModal">
+							<svg class="icon-sprite">
+								<svg viewBox="0 0 64 64">
+								  <title>Alert</title>
+								  <desc>alert symbol</desc>
+								  <g fill="currentColor">
+								    <path d="M50,40c-2.2,0-4-1.8-4-4v-9c0-7.1-5.2-12.9-12-13.8c0,0,0-2.2-2-2.2s-2,2.2-2,2.2c-6.8,1-12,6.8-12,13.8v9
+										c0,2.2-1.8,4-4,4h-1v5h38v-5H50z"/>
+								    <path d="M32,52c3,0,5-2,5-5H27C27,50,29,52,32,52z"/>
+								  </g>
+								<svg class="text-danger">
+									    <g class="icon-dot" fill="currentColor">
+									     <circle cx="56" cy="8" r="6"/>
+									    </g>
+								</svg>
+							</svg></svg>
+						</button>
+					</div>
+					<div class="nav-item" id="admin_panel" data-alerts="3" data-toggle="modal" onclick="admin_op()">
+						<a class="nav-link" id="admin_panel" data-alerts="3" data-toggle="modal">
+							<svg class="icon-sprite">
+								<svg viewBox="0 0 64 64">
+								  <title>Settings</title>
+								  <desc>Settings symbol</desc>
+								  <g fill="currentColor">
+								    <path d="M53,35v-6h-4.8c-0.4-2.3-1.3-4.5-2.6-6.3l3.4-3.4L44.7,15l-3.4,3.4c-1.9-1.3-4-2.2-6.3-2.6V11h-6v4.8
+										c-2.3,0.4-4.5,1.3-6.4,2.6L19.3,15L15,19.3l3.4,3.4c-1.3,1.9-2.2,4-2.6,6.3H11v6h4.8c0.4,2.3,1.3,4.5,2.6,6.3L15,44.7l4.2,4.2
+										l3.4-3.4c1.9,1.3,4,2.2,6.3,2.6V53h6v-4.8c2.3-0.4,4.5-1.3,6.3-2.6l3.4,3.4l4.2-4.2l-3.4-3.4c1.3-1.9,2.2-4,2.6-6.3H53z M32,40.4c-4.6,0-8.4-3.8-8.4-8.4c0-4.6,3.8-8.4,8.4-8.4c4.6,0,8.4,3.8,8.4,8.4C40.4,36.6,36.6,40.4,32,40.4z"/>
+								  </g>
+							</svg> 
+						</svg>
+						</a>
+					</div>
+					<div class="nav-item" onclick="document.getElementById('log').submit()">
+						<a class="nav-link" onclick="logouti()">
+							<svg class="icon-sprite">
+								<svg viewBox="0 0 64 64">
+								  <title>Logout</title>
+								  <desc>Logout symbol</desc>
+								  <g fill="currentColor">
+								    <path d="M39,14.28v7.77c3.6,2.31,6,6.34,6,10.94c0,7.18-5.82,13-13,13s-13-5.82-13-13c0-4.6,2.4-8.63,6-10.94v-7.77C17.41,17.12,12,24.42,12,33c0,11.05,8.95,20,20,20s20-8.95,20-20C52,24.42,46.59,17.12,39,14.28z"/>
+								    <rect x="28" y="11" width="8" height="18"/>
+								  </g>
+							</svg></svg>
+						</a>
+					</div>
+				</div>
+			</div>
+		</nav>
+		<!-- Top navbar END -->
+
+		<!-- Main content START -->
+		<div class="container-fluid px-4 px-sm-5">
+			<!-- Featured START -->
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body d-flex flex-wrap align-items-center p-0">
+							<div class="col-sm-12 col-lg-7 p-0">
+								<div class="ratio-container ratio-8-6 house-bg">
+									<svg xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 800 600">
+										<defs>
+										  <radialGradient id="half-radial" fx="50%" fy="0%" r="50%">
+											  <stop offset="0" stop-color="#ffff9f" stop-opacity="1"/>
+											  <stop offset="1" stop-color="#ffff9f" stop-opacity="0" />
+										  </radialGradient>
+										</defs>
+										<g id="house-armed" style="opacity: 0;">
+										  <rect x="194" y="356" opacity="0.75" fill="#d40050" width="86" height="138"/>
+										  <path fill="#ffffff" d="M249.5,424v-4c0-6.63-5.37-12-12-12s-12,5.37-12,12v4h-4v22h32v-22H249.5z M239.5,435.45V442h-4v-6.55c-1.19-0.69-2-1.97-2-3.45c0-2.21,1.79-4,4-4s4,1.79,4,4C241.5,433.48,240.7,434.75,239.5,435.45z M243.5,424h-12v-4c0-3.31,2.69-6,6-6s6,2.69,6,6V424z"/>
+										 </g>
+										 <g id="house-disarmed" style="opacity: 1;">
+										  <rect x="194" y="356" opacity="0.75" fill="#97bf0d" width="86" height="138"/>
+										  <path fill="#ffffff" d="M249.5,424v-6c0-6.63-5.37-12-12-12s-12,5.37-12,12h6c0-3.31,2.69-6,6-6s6,2.69,6,6v6h-22v22h32v-22H249.5zM239.5,435.45V442h-4v-6.55c-1.19-0.69-2-1.97-2-3.45c0-2.21,1.79-4,4-4s4,1.79,4,4C241.5,433.48,240.7,434.75,239.5,435.45z"/>
+										 </g>
+										 <rect id="doorway-light" x="194" y="356" fill="url(#half-radial)" width="86" height="43"/>
+										 <rect id="garage-light" x="328" y="373" fill="url(#half-radial)" width="260" height="130"/>
+										 <line id="roll-doors" aria-valuenow="0" aria-valuemin="0" aria-valuemax="12" fill="none" stroke="#ffffff" stroke-width="250" stroke-dasharray="20 5 20 5 20 5 20 5 20 110" x1="458" y1="380" x2="458" y2="500"/>
+									</svg>
+								</div>
+							</div>
+							<div class="col-sm-12 col-lg-5 p-3">
+								<ul class="list-group list-group-flush border-bottom-0">
+									<li class="list-group-item d-flex lock px-0 px-sm-3" data-unit="switch-house-lock-pin">
+										<div class="title-status">
+											<h4>Security system</h4>
+											<p class="status"><span class="arm"></span></p>
+										</div>
+										<label class="switch ml-auto mt-2">
+											<input onclick="l_u_home()" type="checkbox" id="switch-house-lock-pin">
+										</label>
+									</li>
+									<li class="list-group-item d-flex px-0 px-sm-3" data-unit="garage-doors">
+										<div class="title-status">
+											<h4>Garage doors</h4>
+											<p class="status">Closed</p>
+										</div>
+										<div class="ml-auto mt-2 timer-controls" data-controls="garage-doors">
+											<button data-action="open" type="button" class="btn btn-primary roll-doors-control">Open</button>
+											<button data-action="pause" type="button" class="btn btn-secondary roll-doors-control">Pause</button>
+											<button data-action="resume" type="button" class="btn btn-secondary roll-doors-control">Resume</button>
+											<button data-action="close" type="button" class="btn btn-primary roll-doors-control">Close</button>
+										</div>
+									</li>
+									<li class="list-group-item d-flex py-4 px-0 px-sm-3" data-unit="switch-light-doorway">
+										<div class="title-status">
+											<h5>Messenger Bot</h5>
+										</div>
+										<label class="switch ml-auto">
+											<input type="checkbox" id="switch-light-doorway">
+										</label>
+									</li>
+									<li class="list-group-item d-flex py-4 px-0 px-sm-3" data-unit="switch-light-garage">
+										<div class="title-status">
+											<h5>Garage light</h5>
+										</div>
+										<label class="switch ml-auto">
+											<input type="checkbox" id="switch-light-garage">
+										</label>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Featured END -->
+			<div class="row">
+				<div class="col-sm-12 col-md-6">
+					<!-- Security system START -->
+					<div class="card lock" data-unit="switch-house-lock">
+						<div class="card-body d-flex flex-wrap">
+							<div class="title-status">
+								<h4>Solar system</h4>
+							</div>
+
+						</div>
+						<div id="get_sol" style="position: relative;top: -21px;right: -29px;">
+							<form id="solar_form" action="" method="POST">
+								<div style="">
+									<h6 style="position: relative;bottom: -30px;">Email</h6>
+									<input id="s_email" type="text" name="" style="width: 230px;position: relative;right: -18%;">
+								</div>
+								<div>
+									<h6 style="position: relative;bottom: -30px;">Password</h6>
+									<input id="s_pass" type="text" name="" style="width: 230px;position: relative;right: -18%;">
+								</div>
+							<button onclick="get_in_sol()" style="right: -26%;position: relative;top: 12px;" class="btn btn-primary roll-doors-control">Get Info</button>
+						</form>
+						</div>
+						<div id="get_sol1">
+							<div class="row">
+								<div style="right: -25px;" class="col-sm-12 col-md-6">
+									<h6 id="curr_power"></h6>
+									<h6 id="day_power"></h6>
+									<h6 id="month_power"></h6>
+									<h6 id="year_power"></h6>
+								</div>
+								<div style="right: -25px;" class="col-sm-12 col-md-6">
+									<h6 id="total_power"></h6>
+									<h6 id="solar_co2"></h6>
+									<h6 id="solar_tree"></h6>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Security system END -->
+				</div>
+
+					<div class="col-sm-12 col-md-6">
+					<!-- Security system START -->
+					<div class="card lock" data-unit="switch-house-lock">
+						<div class="card-body d-flex flex-wrap">
+							<div class="title-status">
+								<h4>Music Player</h4>
+							</div>
+
+						</div>
+						<div style="position: relative;top: -21px;right: -29px;">
+								<div style="">
+									<h6 style="position: relative;bottom: -30px;">Music Name:</h6>
+									<input id="music_name" type="text" name="" style="width: 230px;position: relative;right: -18%;">
+								</div>
+							<button onclick="$.post('/handle_data/' + document.getElementById('music_name').value)" style="right: -26%;position: relative;top: 12px;" class="btn btn-primary roll-doors-control">Play</button>
+							<button onclick="$.post('/player_stop')" style="right: -26%;position: relative;top: 12px;" class="btn btn-primary roll-doors-control">Stop</button>
+							<button onclick="music_pouse()" style="right: -26%;position: relative;top: 12px;" class="btn btn-primary roll-doors-control">Pouse</button>
+						</div>
+					</div>
+					<!-- Security system END -->
+				</div>
+
+			</div>
+			<div class="row">
+				<div class="col-sm-12 col-md-6">
+					<!-- Camera 1  START -->
+					<div class="card active" data-unit="switch-camera-1">
+						<div class="card-img-top card-stream">
+							<div class="embed-responsive embed-responsive-16by9">
+								
+										<iframe src="http://192.168.0.105:5000/stream"></iframe>
+										<video muted loop>
+								</video>
+								<div class="card-preloader">
+									<div class="center-preloader d-flex align-items-center">
+										<div class="spinners">
+											<div class="spinner01"></div>
+											<div class="spinner02"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card-img-top card-stream off">
+							<div class="embed-responsive embed-responsive-16by9">
+								<h2 class="center-abs">OFF</h2>
+							</div>
+						</div>
+						<div class="card-body d-flex">
+							<svg class="icon-sprite">
+								<svg viewBox="0 0 64 64">
+									  <title>Camera</title>
+									  <desc>Camera symbol</desc>
+									  <g fill="currentColor">
+									    <polygon points="5,39 17,36 25,44 22,57"/>
+									    <path d="M52,50h3V33h-3v7h-6l-4-4l12-12L38,7L14,30l17,17l9-9l5,5h7V50z M36,35c-1.7,0-3-1.3-3-3c0-1.7,1.3-3,3-3
+											s3,1.3,3,3C39,33.7,37.7,35,36,35z"/>
+									  </g>
+								</svg>
+							</svg>
+							<h5>Outdoor front</h5>
+							<label class="switch ml-auto checked">
+								<input type="checkbox" id="switch-camera-1" checked>
+							</label>
+						</div>
+					</div>
+					<!-- Camera 1  END -->
+				</div>
+				<div class="col-sm-12 col-md-6">
+					<!-- Camera 2  START -->
+					<div class="card" data-unit="switch-camera-2">
+						<div class="card-img-top card-stream">
+							<div class="embed-responsive embed-responsive-16by9">
+								<video muted loop>
+									<source type="video/mp4" />
+									<source type="video/webm" />
+								</video>
+								<div class="card-preloader">
+									<div class="center-preloader d-flex align-items-center">
+										<div class="spinners">
+											<div class="spinner01"></div>
+											<div class="spinner02"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card-img-top card-stream off">
+							<div class="embed-responsive embed-responsive-16by9">
+								<h2 class="center-abs">OFF</h2>
+							</div>
+						</div>
+						<div class="card-body d-flex">
+							<svg class="icon-sprite">
+								<svg viewBox="0 0 64 64">
+									  <title>Camera</title>
+									  <desc>Camera symbol</desc>
+									  <g fill="currentColor">
+									    <polygon points="5,39 17,36 25,44 22,57"/>
+									    <path d="M52,50h3V33h-3v7h-6l-4-4l12-12L38,7L14,30l17,17l9-9l5,5h7V50z M36,35c-1.7,0-3-1.3-3-3c0-1.7,1.3-3,3-3
+											s3,1.3,3,3C39,33.7,37.7,35,36,35z"/>
+									  </g>
+								</svg>
+							</svg>
+							<h5>Joe's room</h5>
+							<label class="switch ml-auto">
+								<input type="checkbox" id="switch-camera-2">
+							</label>
+						</div>
+					</div>
+					<!-- Camera 2  END -->
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12 col-md-6">
+					<!-- Security system START -->
+					<div class="card lock" data-unit="switch-house-lock">
+						<div class="card-body d-flex flex-wrap">
+							<svg class="icon-sprite icon-2x">
+								<svg viewBox="0 0 64 64">
+									  <title>Home</title>
+									  <desc>Home symbol</desc>
+									  <g fill="currentColor">
+									    <polygon points="10,29 32,10 54,29"/>
+									    <polygon points="15,31 15,51 28,51 28,42 36,42 36,51 49,51 49,31"/>
+									  </g>
+								</svg>
+								<use class="subicon-unlocked" xlink:href="assets/images/icons-sprite.svg#subicon-unlocked"/>
+								<use class="subicon-locked" xlink:href="assets/images/icons-sprite.svg#subicon-locked"/>
+							</svg>
+							<div class="title-status">
+								<h4>Security system</h4>
+								<p class="status"><span class="arm"></span></p>
+							</div>
+							<label class="switch ml-auto">
+								<input type="checkbox" id="switch-house-lock">
+							</label>
+						</div>
+					</div>
+					<!-- Security system END -->
+				</div>
+				<div class="col-sm-12 col-md-6">
+					<!-- Garage-doors START -->
+					<div class="card" data-unit="garage-doors-1">
+						<div class="card-body">
+							<div class="d-flex flex-wrap mb-2">
+								<svg class="icon-sprite icon-1x">
+									<svg viewBox="0 0 64 64">
+										  <title>Garage</title>
+										  <desc>Garage symbol</desc>
+										  <g fill="currentColor">
+										    <polygon points="10,22 32,15 54,22 54,26 32,19 10,26"/>
+										    <polygon points="15,26.4 15,47 21,47 21,31 43,31 43,47 49,47 49,26.4 32,21"/>
+										    <rect x="23" y="38" width="18" height="3"/>
+										    <rect x="23" y="33" width="18" height="3"/>
+										    <rect x="23" y="43" width="18" height="3"/>
+										  </g>
+									</svg>
+								</svg>
+								<div class="title-status">
+									<h5>Garage doors</h5>
+									<p class="status">Closed</p>
+								</div>
+								<div class="ml-auto timer-controls" data-controls="garage-doors-1">
+									<button data-action="open" type="button" class="btn btn-primary doors-control">Open</button>
+									<button data-action="pause" type="button" class="btn btn-secondary doors-control">Pause</button>
+									<button data-action="resume" type="button" class="btn btn-secondary doors-control">Resume</button>
+									<button data-action="close" type="button" class="btn btn-primary doors-control">Close</button>
+								</div>
+							</div>
+							<div class="progress">
+								<div class="progress-bar progress-tiny timer" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="12"></div>
+							</div>
+							<div class="info-holder info-cb">
+								<div data-toggle="popover-all" data-content="Element driven by javascript (countdown timer)." data-original-title="Progress indicator" data-placement="top" data-offset="0,-12"></div>
+							</div>
+						</div>
+					</div>
+					<!-- Garage-doors END -->
+				</div>
+			</div>
+			<br><br>
+		</div>
+		<!-- Main content END -->
+		<!-- Bottom navbar START -->
+		<nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
+			<button class="navbar-toggler mx-auto text-primary collapsed" type="button" data-toggle="collapse" data-target="#bottomCollapse" aria-expanded="false">
+        		<svg class="icon-sprite">
+        			<svg viewBox="0 0 64 64">
+        				  <title>Menu Arrow</title>
+						  <desc>Menu Arrow symbol</desc>
+						  <g fill="currentColor">
+						    <rect x="25" y="16" width="14" height="6"/>
+						    <rect x="15" y="30" width="34" height="6"/>
+						    <rect x="5" y="44" width="54" height="6"/>
+						  </g>
+        			</svg>
+        		</svg>
+      		</button>
+			<div class="collapse navbar-collapse" id="bottomCollapse">
+				<ul class="navbar-nav mx-auto">
+					<li class="nav-item active">
+						<a class="nav-link active" href="index.html">
+							<svg class="icon-sprite">
+								  <title>Dashboard</title>
+									  <desc>Dashboard symbol</desc>
+									  <g fill="currentColor">
+									    <rect x="26" y="36" width="29" height="16"/>
+									    <rect x="9" y="22" width="14" height="30"/>
+									    <rect x="26" y="22" width="13" height="11"/>
+									    <rect x="42" y="22" width="13" height="11"/>
+									    <path d="M9,12v7h46v-7H9z M41.5,17c-0.83,0-1.5-0.67-1.5-1.5s0.67-1.5,1.5-1.5s1.5,0.67,1.5,1.5S42.33,17,41.5,17z
+											 M46.5,17c-0.83,0-1.5-0.67-1.5-1.5s0.67-1.5,1.5-1.5s1.5,0.67,1.5,1.5S47.33,17,46.5,17z M51.5,17c-0.83,0-1.5-0.67-1.5-1.5s0.67-1.5,1.5-1.5s1.5,0.67,1.5,1.5S52.33,17,51.5,17z"/>
+									  </g>
+
+							</svg> <span>Dashboard</span>
+						</a>
+					</li>
+
+					<li class="nav-item" onclick="document.getElementById('cam').submit()">
+						<a class="nav-link">
+							<svg class="icon-sprite">
+								<svg viewBox="0 0 64 64">
+									  <title>Camera</title>
+									  <desc>Camera symbol</desc>
+									  <g fill="currentColor">
+									    <polygon points="5,39 17,36 25,44 22,57"/>
+									    <path d="M52,50h3V33h-3v7h-6l-4-4l12-12L38,7L14,30l17,17l9-9l5,5h7V50z M36,35c-1.7,0-3-1.3-3-3c0-1.7,1.3-3,3-3
+											s3,1.3,3,3C39,33.7,37.7,35,36,35z"/>
+									  </g>
+								</svg>
+							</svg> <span>Cameras</span>
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" onclick="document.getElementById('clim').submit()">
+							<svg class="icon-sprite">
+								<svg viewBox="0 0 64 64">
+									  <title>Thermometer</title>
+									  <desc>Thermometer symbol</desc>
+									  <g fill="currentColor">
+									    <path d="M41,30.84V18c0-5.52-4.48-10-10-10c-5.52,0-10,4.48-10,10v12.84c-3.06,2.75-5,6.72-5,11.16c0,8.28,6.72,15,15,15
+											c8.28,0,15-6.72,15-15C46,37.56,44.06,33.59,41,30.84z M31,53c-6.08,0-11-4.93-11-11c0-3.86,1.99-7.25,5-9.21V18c0-3.31,2.69-6,6-6
+											s6,2.69,6,6v14.79c3.01,1.96,5,5.35,5,9.21C42,48.07,37.07,53,31,53z"/>
+									    <path d="M33.5,35.47V23h-5v12.47C25.87,36.48,24,39.02,24,42c0,3.87,3.13,7,7,7c3.87,0,7-3.13,7-7C38,39.02,36.13,36.48,33.5,35.47z"/>
+									    <rect x="44" y="15" width="8" height="2"/>
+									    <rect x="44" y="21" width="8" height="2"/>
+									    <rect x="44" y="27" width="8" height="2"/>
+									  </g>
+								</svg>
+							</svg> <span>Climate</span>
+						</a>
+					</li>
+
+				</ul>
+			</div>
+		</nav>
+		<!-- Bottom navbar END -->
+
+	</div>
+	<!-- Wrapper END -->
+
+	<!-- FAB button - bottom right on large screens -->
+	<button id="info-toggler" type="button" class="btn btn-primary btn-fab btn-fixed-br d-none d-lg-inline-block">
+    	<svg class="icon-sprite">
+    		<svg viewBox="0 0 64 64">
+    			  <title>Info</title>
+				  <desc>Info symbol</desc>
+				  <g fill="currentColor">
+				    <path d="M32,45c-2,4,3,2,5,0c2-2,5,0,2,3c-10,10-22,6-19,0.1L28,29c2.5-4.7-2-3-5,0c-2,2-5,0-2-3c12-12,21-4,18.8,0.9L32,45z"/>
+				    <circle cx="39" cy="13" r="5"/>
+				  </g>
+    		</svg>
+    	</svg>
+	</button>
+
+	<!-- jQuery -->
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+	<!-- Bootstrap bundle -->
+	<script src="static/assets/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Cross browser support for SVG icon sprites -->
+	<script src="static/assets/js/svg4everybody.min.js"></script>
+
+	<!-- jQuery countdown timer plugin (Exit modal, Garage doors, Washing machine) -->
+	<script src="static/assets/js/iot-timer.min.js"></script>
+
+	<!-- Basic theme functionality (arming, garage doors, switches ...) - using jQuery -->
+	<script src="static/assets/js/iot-functions.min.js"></script>
+
+	 
+
+	<script>
+
+var get_solar_info = 0;
+var socket = io.connect('http://' + document.domain + ':' + location.port)
+
+  socket.on( 'connect', function() {
+  socket.emit( 'my solar', {
+    data: 'User Connected'
+  } )
+  var form = $( '#solar_form' ).on( 'submit', function( e ) {
+    e.preventDefault()
+    get_solar_info = 1;
+    //document.getElementById("get_sol").display.none;
+    socket.emit( 'my solar', {
+      user_name : document.getElementById("s_email").value,
+      message : document.getElementById("s_pass").value
+    } )
+    // empty the input field
+  } )
+} )
+
+socket.on( 'my resp', function( msg ) {
+  	console.log("aaaaaa")
+  	console.log(msg)
+  
+} )
+
+function l_u_home(){
+	if (document.getElementById("switch-house-lock-pin").checked){
+		$('[data-unit="' + "switch-house-lock-pin" + '"]').addClass("active");
+		$("#" + "switch-house-lock-pin").prop('checked', true);
+		$("#" + "switch-house-lock-pin").closest("label").addClass("checked");
+		$('#house-disarmed').css('opacity', '0');
+		$('#house-armed').css('opacity', '1');
+		$.post("/lock_home")
+	}
+	else{
+		$('[data-unit="' + "switch-house-lock-pin" + '"]').removeClass("active");
+		$("#" + "switch-house-lock-pin").prop('checked', false);
+		$("#" + "switch-house-lock-pin").closest("label").removeClass("checked");
+		$('#house-disarmed').css('opacity', '1');
+		$('#house-armed').css('opacity', '0');
+		$.post("/unlock_home")
+	}
+}
+
+		  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+		  console.log("Solar info in");
+        (function(){
+
+        $.getJSON(
+            $SCRIPT_ROOT+"/s_sys", // Your AJAX route here
+            function(s_sys) {
+            	if(s_sys[0].length > 0 ){
+            		console.log(s_sys)
+            		document.getElementById("curr_power").innerHTML = "Current Power:  " + String(s_sys[1][2]);
+            		document.getElementById("day_power").innerHTML = "Day Power:  " + String(s_sys[1][3]);
+            		document.getElementById("month_power").innerHTML = "Month Power:  " + String(s_sys[1][4]);
+            		document.getElementById("year_power").innerHTML = "Year Power:  " + String(s_sys[1][5]);
+            		document.getElementById("total_power").innerHTML = "Total Power:  " + String(s_sys[1][6]);
+            		document.getElementById("solar_tree").innerHTML = "Tree(s) you make:  " + String(s_sys[1][7]);
+            		document.getElementById("solar_co2").innerHTML = "CO2 :  " + String(s_sys[1][8]);
+            	}
+            	if(s_sys[1].length > 0){
+            		get_in_sol()
+            		document.getElementById("curr_power").innerHTML = "Current Power:  " + String(s_sys[1][2]);
+            		document.getElementById("day_power").innerHTML = "Day Power:  " + String(s_sys[1][3]);
+            		document.getElementById("month_power").innerHTML = "Month Power:  " + String(s_sys[1][4]);
+            		document.getElementById("year_power").innerHTML = "Year Power:  " + String(s_sys[1][5]);
+            		document.getElementById("total_power").innerHTML = "Total Power:  " + String(s_sys[1][6]);
+            		document.getElementById("solar_tree").innerHTML = "Tree(s) you make:  " + String(s_sys[1][7]);
+            		document.getElementById("solar_co2").innerHTML = "CO2 :  " + String(s_sys[1][8]);
+            	}
+            //if(s_sys[2]){
+            	//$('[data-unit="' + "switch-house-lock-pin" + '"]').addClass("active");
+				//$("#" + "switch-house-lock-pin").prop('checked', true);
+				//$("#" + "switch-house-lock-pin").closest("label").addClass("checked");
+            //}
+            	if (s_sys[2] == '1'){
+		$('[data-unit="' + "switch-house-lock-pin" + '"]').addClass("active");
+		$("#" + "switch-house-lock-pin").prop('checked', true);
+		$("#" + "switch-house-lock-pin").closest("label").addClass("checked");
+		$('#house-disarmed').css('opacity', '0');
+		$('#house-armed').css('opacity', '1');
+	}
+	else{
+		$('[data-unit="' + "switch-house-lock-pin" + '"]').removeClass("active");
+		$("#" + "switch-house-lock-pin").prop('checked', false);
+		$("#" + "switch-house-lock-pin").closest("label").removeClass("checked");
+		$('#house-disarmed').css('opacity', '1');
+		$('#house-armed').css('opacity', '0');
+	}
+
+            });
+        setTimeout(arguments.callee, 1000);
+         })();
+
+function get_in_sol(){
+
+document.getElementById("get_sol").style.display = "none";
+document.getElementById("get_sol1").style.display = "block";
+
+}
+
+console.log(get_solar_info);
+
+
+
+		$(document).ready(function() {
+
+			// Get checkbox statuses from localStorage if available (IE)
+			if (localStorage) {
+
+
+				// Switch statuses
+				var switchValues = JSON.parse(localStorage.getItem('switchValues')) || {};
+
+				$.each(switchValues, function(key, value) {
+
+					// Apply only if element is included on the page
+					if ($('[data-unit="' + key + '"]').length) {
+
+						if (value === true) {
+
+							// Apply appearance of the "unit" and checkbox element
+							$('[data-unit="' + key + '"]').addClass("active");
+							$("#" + key).prop('checked', true);
+							$("#" + key).closest("label").addClass("checked");
+
+							//In case of Security unit with SVG illustration
+							if (key === "switch-house-lock-pin") {
+								$.post("/lock_home");
+								$('#house-disarmed').css('opacity', '0');
+								$('#house-armed').css('opacity', '1');
+								console.log("Lock");
+							}
+
+							//In case of Doorway light (featured)
+							/*if (key === "switch-light-doorway") {
+								$('#doorway-light').addClass("active");
+							}
+							*/
+							//In case of Garage light (featured)
+							if (key === "switch-light-garage") {
+								$('#garage-light').addClass("active");
+							}
+
+							//In case of Camera unit - play video
+							if (key === "switch-camera-1" || key === "switch-camera-2") {
+								$('[data-unit="' + key + '"] video')[0].play();
+							}
+
+						} else {
+							$('[data-unit="' + key + '"]').removeClass("active");
+							$("#" + key).prop('checked', false);
+							$("#" + key).closest("label").removeClass("checked");
+
+							//In case of Security unit with SVG illustration
+							if (key === "switch-house-lock-pin") {
+								
+								$.post("/unlock_home");
+								$('#house-disarmed').css('opacity', '1');
+								$('#house-armed').css('opacity', '0');
+								console.log("UnLock")
+							}
+
+							//In case of Doorway light (featured)
+							/*if (key === "switch-light-doorway") {
+								$('#doorway-light').removeClass("active");
+							}
+							*/
+							//In case of Garage light (featured)
+							if (key === "switch-light-garage") {
+								$('#garage-light').removeClass("active");
+							}
+
+							if (key === "switch-camera-1" || key === "switch-camera-2") {
+								$('[data-unit="' + key + '"] video')[0].pause();
+							}
+						}
+					}
+				});
+			}
+
+			// Switch (checkbox element) toogler
+			$('.switch input[type="checkbox"]').on("change", function(t) {
+
+				// Check the time between changes to prevert Android native browser execute twice
+				// If you dont need support for Android native browser - just call "switchSingle" function
+				if (this.last) {
+
+					this.diff = t.timeStamp - this.last;
+
+					// Don't execute if the time between changes is too short (less than 250ms) - Android native browser "twice bug"
+					// The real time between two human taps/clicks is usually much more than 250ms"
+					if (this.diff > 250) {
+
+						this.last = t.timeStamp;
+
+						iot.switchSingle(this.id, this.checked);
+
+					} else {
+						return false;
+					}
+
+				} else {
+
+					// First attempt on this switch element
+					this.last = t.timeStamp;
+
+					iot.switchSingle(this.id, this.checked);
+
+				}
+			});
+
+			// All ON/OFF controls
+			$('.lights-control').click(function() {
+
+				var target = $(this).closest('.lights-controls').data('controls');
+				var action = $(this).data('action');
+
+				iot.switchGroup(target, action);
+			});
+
+			// Reposition to center when a modal is shown
+			$('.modal.centered').on('show.bs.modal', iot.centerModal);
+
+			// Reset/Stop countdown timer (EXIT NOW)
+			$('#armModal').on('hide.bs.modal', iot.clearCountdown);
+
+			// Reset PIN keyboard and checkbox
+			$('#cancel-keyboard').click(function() {
+				iot.clearKeyboard();
+			});
+
+			// Garage roll-doors controls
+			$('.roll-doors-control').click(function() {
+
+				var target = $(this).closest('.timer-controls').data('controls');
+				var action = $(this).data('action');
+				iot.garageDoorsRoll(target, action);
+
+			});
+
+			// Garage doors controls
+			$('.doors-control').click(function() {
+
+				var target = $(this).closest('.timer-controls').data('controls');
+				var action = $(this).data('action');
+				iot.garageDoors(target, action);
+
+			});
+
+			// Alerts "Close" callback - hide modal and alert indicator dot when user closes all alerts
+			$('#alertsModal .alert').on('close.bs.alert', function() {
+				var sum = $('#alerts-toggler').attr('data-alerts');
+				sum = sum - 1;
+				$('#alerts-toggler').attr('data-alerts', sum);
+
+				if (sum === 0) {
+					$('#alertsModal').modal('hide');
+					$('#alerts-toggler').attr('data-toggle', 'none');
+
+				}
+
+			});
+
+
+			// Show/hide tips (popovers) - FAB button (right bottom on large screens)
+			$('#info-toggler').click(function() {
+
+				if ($('body').hasClass('info-active')) {
+					$('[data-toggle="popover-all"]').popover('hide');
+					$('body').removeClass('info-active');
+				} else {
+					$('[data-toggle="popover-all"]').popover('show');
+					$('body').addClass('info-active');
+				}
+			});
+
+			// Hide tips (popovers) by clicking outside
+			$('body').on('click', function(pop) {
+
+				if (pop.target.id !== 'info-toggler' && $('body').hasClass('info-active')) {
+					$('[data-toggle="popover-all"]').popover('hide');
+					$('body').removeClass('info-active');
+				}
+
+			});
+
+		});
+
+		// Apply necessary changes, functionality when content is loaded
+		$(window).on('load', function() {
+
+			// This script is necessary for cross browsers icon sprite support (IE9+, ...) 
+			svg4everybody();
+
+			// Washing machine - demonstration of running program/cycle
+			$('#wash-machine').timer({
+				countdown: true,
+				format: '%H:%M:%S',
+				duration: '1h17m10s',
+				callback: function() {
+					$('[data-unit="wash-machine"]').removeClass("active");
+					$('[data-unit="wash-machine"] .status').html('OFF');
+				}
+			});
+
+			if ($('[data-unit="switch-camera-1"]').hasClass("active")) {
+				var activeVideo = $('[data-unit="switch-camera-1"] video').get(0);
+
+				if (activeVideo.paused) {
+					activeVideo.autoplay = true;
+					activeVideo.load();
+					activeVideo.play();
+				} else {
+					activeVideo.pause();
+				}
+			}
+
+			if ($('[data-unit="switch-camera-2"]').hasClass("active")) {
+				var activeVideo = $('[data-unit="switch-camera-2"] video').get(0);
+
+				if (activeVideo.paused) {
+					activeVideo.autoplay = true;
+					activeVideo.load();
+					activeVideo.play();
+				} else {
+					activeVideo.pause();
+				}
+			}
+
+			// "Timeout" function is not neccessary - important is to hide the preloader overlay
+			setTimeout(function() {
+
+				// Hide preloader overlay when content is loaded
+				$('#iot-preloader,.card-preloader').fadeOut();
+				$("#wrapper").removeClass("hidden");
+
+				// Check for Main contents scrollbar visibility and set right position for FAB button
+				iot.positionFab();
+
+			}, 800);
+
+		});
+
+		// Apply necessary changes if window resized
+		$(window).on('resize', function() {
+
+			// Modal reposition when the window is resized
+			$('.modal.centered:visible').each(iot.centerModal);
+
+			// Check for Main contents scrollbar visibility and set right position for FAB button
+			iot.positionFab();
+		});
+
+	function logouti(){
+		$.post("/valod");
+		$.post("/valod");
+		document.getElementById("log").submit();
+		window.location.href = "log";
+	}
+
+	  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+
+        (function(){
+
+                            $.getJSON(
+            $SCRIPT_ROOT+"/get_curr_us", // Your AJAX route here
+            function(get_curr_us) {
+            	console.log(get_curr_us[0][2]);
+            	if(get_curr_us[0][2] == 1){
+            		document.getElementById("admin_panel").style.display = "block";
+            	}
+            	else{
+            		document.getElementById("admin_panel").style.display = "none";
+            	}
+            });
+         })();
+         function admin_op(){
+         	  if (box.classList.contains('hidden')) {
+    box.classList.remove('hidden');
+    setTimeout(function () {
+      box.classList.remove('visuallyhidden');
+    }, 20);
+  } else {
+    box.classList.add('visuallyhidden');    
+    box.addEventListener('transitionend', function(e) {
+      box.classList.add('hidden');
+    }, {
+      capture: false,
+      once: true,
+      passive: false
+    });
+  }
+         }
+        // document.getElementById("box").style.display = 'none';
+	</script>
+
+	<style type="text/css">
+		.box {
+		 /* background: goldenrod;
+		  width: 300px;
+		  height: 300px;
+		  margin: 30px auto;*/
+		  position: fixed;
+	    top: 0;
+	    left: 0;
+	    z-index: 99;
+	    /* display: none; */
+	    width: 100%;
+	    height: 100%;
+	    overflow: hidden;
+	    outline: 0;
+		  transition: all 200ms linear;
+		  display: block;
+		  background-color: #fff;
+		}
+
+		.hidden {
+		  display: none;
+		}
+
+		.visuallyhidden {
+		  opacity: 0;
+		}
+		.custom-file-input::-webkit-file-upload-button {
+		  visibility: hidden;
+		}
+		.custom-file-input::before {
+		  content: 'Select some files';
+		  display: inline-block;
+		  background: linear-gradient(top, #f9f9f9, #e3e3e3);
+		  border: 1px solid #999;
+		  border-radius: 3px;
+		  padding: 5px 8px;
+		  outline: none;
+		  white-space: nowrap;
+		  -webkit-user-select: none;
+		  cursor: pointer;
+		  text-shadow: 1px 1px #fff;
+		  font-weight: 700;
+		  font-size: 10pt;
+		}
+		.custom-file-input:hover::before {
+		  border-color: black;
+		}
+		.regist_butt{
+			border-color: #8d98a2; */
+		    height: 34px;
+		    width: 108px;
+		    text-align: center;
+		    border: 1px solid #999;
+		    border-radius: 3px;
+		    text-shadow: 1px 1px #fff;
+		    font-weight: 700;
+		    font-size: 10pt;
+		    background: linear-gradient(top, #f9f9f9, #e3e3e3);
+		    padding: 5px 8px;
+		}
+		.custom-file-input:active::before {
+		  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+		}
+	</style>
+<script type="text/javascript">document.getElementById("box").className = 'box hidden';</script>
+</body>
+
+</html>
