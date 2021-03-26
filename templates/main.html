@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="Jozef Dvorský - creatingo.com">
+
+	<title>Home Climate</title>
+
+	<!-- Bootstrap core CSS with custom theme variables + Additional theme styles -->
+    <link href="static/assets/css/iot-theme-bundle.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+	<!-- Preloader -->
+	<form id="log" action="log"></form>
+	<form id="hm" action="home"></form>
+	<form id="cam" action="camera"></form>
+	<div id="iot-preloader">
+		<div class="center-preloader d-flex align-items-center">
+			<div class="spinners">
+				<div class="spinner01"></div>
+				<div class="spinner02"></div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Alerts Modal -->
+	<div class="modal modal-nobg centered fade" id="alertsModal" tabindex="-1" role="dialog" aria-label="Alerts" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-body">
+					<div class="alert alert-danger alert-dismissible fade show border-0" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              				<span aria-hidden="true">&times;</span>
+            			</button> Security SW update available
+					</div>
+					<div class="alert alert-warning alert-dismissible fade show border-0" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              				<span aria-hidden="true">&times;</span>
+            			</button> New device recognized
+					</div>
+					<div class="alert alert-warning alert-dismissible fade show border-0" role="alert">
+						<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              				<span aria-hidden="true">&times;</span>
+            			</button> User profile is not complete
+					</div>
+				</div>
+			</div>
+		</div>
+		<button type="button" class="close close-modal" data-dismiss="modal" aria-label="Close">
+      		<span aria-hidden="true">&times;</span>
+    	</button>
+	</div>
+
+	<!-- Wrapper START -->
+	<div id="wrapper" class="hidden">
+		<!-- Top navbar START -->
+		<!-- Top navbar END -->
+
+
+		<!-- Main content START -->
+
+		<div class="container-fluid px-4 px-sm-5">
+			<div class="row">
+				<!-- Appliances  START -->
+				<div class="col-sm-12 col-md-6">
+					<!-- Living room temperature  START -->
+					<div class="card active" data-unit="room-temp-02">
+						<ul class="list-group borderless">
+							<li class="list-group-item align-items-center">
+								<svg class="icon-sprite icon-1x">
+                        			<svg viewBox="0 0 64 64">
+                        				  <title>Thermometer</title>
+										  <desc>Thermometer symbol</desc>
+										  <g fill="currentColor">
+											<rect x="44" y="14" width="8" height="2"/>
+										    <rect x="44" y="20" width="8" height="2"/>
+										    <rect x="45" y="26" width="7" height="2"/>
+										    <path d="M39.5,29.89V18.5c0-4.69-3.81-8.5-8.5-8.5c-4.69,0-8.5,3.81-8.5,8.5v11.39C19.16,32.45,17,36.47,17,41
+												c0,7.73,6.27,14,14,14c7.73,0,14-6.27,14-14C45,36.47,42.84,32.45,39.5,29.89z M31,52.5c-6.35,0-11.5-5.15-11.5-11.5
+												c0-4.15,2.21-7.77,5.5-9.8V18.5c0-3.31,2.69-6,6-6c3.31,0,6,2.69,6,6v12.7c3.29,2.02,5.5,5.65,5.5,9.8
+												C42.5,47.35,37.35,52.5,31,52.5z"/>
+										    <path d="M33,34.29V22h-4v12.29c-2.89,0.86-5,3.54-5,6.71c0,3.87,3.13,7,7,7s7-3.13,7-7C38,37.83,35.89,35.15,33,34.29z"/>
+										  </g>
+                        			</svg>
+                      			</svg>
+								<h5>Room</h5>
+								<h5 id="roomTemp" class="ml-auto status">71.2<sup>°C</sup></h5>
+							</li>
+						</ul>
+						<hr class="my-0">
+						<div class="d-flex justify-content-between" data-rangeslider="room-temp-02">
+							<ul class="list-group borderless px-1 align-items-stretch">
+								<li class="list-group-item">
+									<p class="specs mr-auto mb-auto">Desired temperature</p>
+								</li>
+								<li class="list-group-item d-flex flex-column pb-4">
+									<p class="mr-auto mt-2 mb-0 display-5">
+										<span class="room-temp-C" >71.6</span><sup>°C</sup>
+									</p>
+									<p class="mr-auto mt-2 mb-0 lead text-primary">
+										<span class="room-temp-F">22</span><sup>°F</sup>
+									</p>
+								</li>
+							</ul>
+							<div class="p-4" style="position:relative;">
+								<input id="room-temp-02" class="room-temp" type="range" min="66.2" max="77" step="0.1" value="71.6" data-orientation="vertical">
+							</div>
+						</div>
+					</div>
+					<!-- Living room temperature  END -->
+				</div>
+				<div class="col-sm-12 col-md-6">
+					<!-- Bedroom temperature  START -->
+					<div class="card" data-unit="room-temp-01">
+						<ul class="list-group borderless">
+							<li class="list-group-item align-items-center">
+								<svg class="icon-sprite icon-1x">
+                        		<svg viewBox="0 0 64 64">
+                        				  <title>Thermometer</title>
+										  <desc>Thermometer symbol</desc>
+										  <g fill="currentColor">
+											<rect x="44" y="14" width="8" height="2"/>
+										    <rect x="44" y="20" width="8" height="2"/>
+										    <rect x="45" y="26" width="7" height="2"/>
+										    <path d="M39.5,29.89V18.5c0-4.69-3.81-8.5-8.5-8.5c-4.69,0-8.5,3.81-8.5,8.5v11.39C19.16,32.45,17,36.47,17,41
+												c0,7.73,6.27,14,14,14c7.73,0,14-6.27,14-14C45,36.47,42.84,32.45,39.5,29.89z M31,52.5c-6.35,0-11.5-5.15-11.5-11.5
+												c0-4.15,2.21-7.77,5.5-9.8V18.5c0-3.31,2.69-6,6-6c3.31,0,6,2.69,6,6v12.7c3.29,2.02,5.5,5.65,5.5,9.8
+												C42.5,47.35,37.35,52.5,31,52.5z"/>
+										    <path d="M33,34.29V22h-4v12.29c-2.89,0.86-5,3.54-5,6.71c0,3.87,3.13,7,7,7s7-3.13,7-7C38,37.83,35.89,35.15,33,34.29z"/>
+										  </g>
+                        			</svg>
+                      			</svg>
+								<h5>Radiator</h5>
+								<h5 class="ml-auto status" id="radTemp">71.6<sup>°C</sup></h5>
+							</li>
+						</ul>
+						<hr class="my-0">
+						<div class="d-flex justify-content-between" data-rangeslider="room-temp-01">
+							<ul class="list-group borderless px-1 align-items-stretch">
+								<li class="list-group-item">
+									<p class="specs mr-auto mb-auto">Desired temperature</p>
+								</li>
+								<li class="list-group-item d-flex flex-column pb-4">
+									<p class="mr-auto mt-2 mb-0 display-5">
+										<span class="room-temp-C" id="roomTempCel">71.6</span><sup>°C</sup>
+									</p>
+									<p class="mr-auto mt-2 mb-0 lead text-primary">
+										<span class="room-temp-F">22</span><sup>°F</sup>
+									</p>
+								</li>
+							</ul>
+							<div class="p-4" style="position:relative;">
+								<input id="room-temp-01" class="room-temp" type="range" min="0" max="200" step="1" value="240" data-orientation="vertical">
+								<div class="info-holder info-lc">
+									<div data-toggle="popover-all" data-content="jQuery range slider using localStorage to remember the last status." data-original-title="Temperature control" data-placement="left" data-offset="0 -12px"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- Bedroom temperature  END -->
+				</div>
+				<div class="col-sm-12 col-md-6">
+					<!-- FAN Kitchen  START -->
+					<div class="card active" data-unit="fan-kitchen">
+						<!-- FAN Kitchen switch START -->
+						<ul class="list-group borderless">
+							<li class="list-group-item align-items-center">
+								<svg class="icon-sprite icon-1x">
+                        			<svg viewBox="0 0 64 64">
+                        				  <title>Fan</title>
+										  <desc>Fan symbol</desc>
+										  <g fill="currentColor">
+										    <path d="M32,10c-12.15,0-22,9.85-22,22c0,12.15,9.85,22,22,22c12.15,0,22-9.85,22-22C54,19.85,44.15,10,32,10z M32,52
+												c-11.05,0-20-8.95-20-20c0-11.05,8.95-20,20-20c11.05,0,20,8.95,20,20C52,43.05,43.05,52,32,52z"/>
+										    <path d="M50.01,30.22c-0.17-1.66-1.52-2.02-2.82-0.98c-2.63,2.09-5.31,3.43-8.26,3.74C38.97,32.66,39,32.33,39,32
+												c0-1.08-0.25-2.11-0.7-3.03c3.19-2.31,5.35-5.51,4.76-9.05c-1.01-6.04-9.65-6.26-12.84-5.94c-1.66,0.17-2.02,1.52-0.98,2.82
+												c2.09,2.63,3.43,5.31,3.74,8.26C32.66,25.03,32.33,25,32,25c-1.09,0-2.11,0.25-3.03,0.69c-2.31-3.19-5.51-5.35-9.05-4.76
+												c-6.04,1.01-6.26,9.65-5.94,12.84c0.17,1.66,1.52,2.02,2.82,0.98c2.63-2.09,5.31-3.43,8.26-3.75C25.03,31.34,25,31.67,25,32
+												c0,1.08,0.25,2.11,0.69,3.03c-3.19,2.31-5.35,5.51-4.76,9.05c1.01,6.04,9.65,6.25,12.84,5.94c1.66-0.17,2.02-1.52,0.98-2.82
+												c-2.09-2.63-3.43-5.31-3.75-8.26C31.34,38.97,31.67,39,32,39c1.08,0,2.11-0.25,3.03-0.7c2.31,3.19,5.51,5.35,9.05,4.76
+												C50.11,42.06,50.33,33.42,50.01,30.22z M27,32c0-2.76,2.24-5,5-5c2.76,0,5,2.24,5,5c0,2.76-2.24,5-5,5C29.24,37,27,34.76,27,32z"/>
+										    <circle cx="32" cy="32" r="3"/>
+										  </g>
+                        			</svg>
+                      			</svg>
+								<h5>Cooler 1</h5>
+								<label class="switch ml-auto checked">
+                        			<input type="checkbox" id="fan-kitchen" checked>
+                      			</label>
+							</li>
+						</ul>
+						<!-- FAN Kitchen switch END -->
+						<div class="only-if-active">
+							<hr class="my-0">
+							<ul class="list-group borderless px-1">
+								<li class="list-group-item pb-0">
+									<p class="specs">Connection</p>
+									<p class="ml-auto mb-0 text-success">OK</p>
+								</li>
+							</ul>
+							<!-- Speed control - range slider START -->
+							<ul class="list-group borderless px-1" data-rangeslider="fan-01">
+								<li class="list-group-item">
+									<p class="specs">Speed</p>
+									<p class="ml-auto mb-0"><span class="range-output">3</span></p>
+								</li>
+								<li class="list-group-item pt-0 pb-4">
+									<input id="fan-01" class="fanspeed" type="range" min="1" max="6" value="3">
+								</li>
+							</ul>
+							<!-- Speed control - range slider END -->
+                        </div>
+                        <li class="list-group-item flex-column py-2">
+                            <p class="specs w-100">State</p>
+                            <div class="btn-group btn-group-toggle w-100 py-2" data-toggle="buttons">
+                                <label onclick='$.post("/cool/cooler1/2")' id="cool1Auto" class="btn btn-label btn-sm mb-0 col-4 active">
+                                      <input type="radio" name="options" id="c2-nv-auto" autocomplete="off" checked> AUTO
+                                </label>
+                                <label onclick='$.post("/cool/cooler1/1")' id="cool1On" class="btn btn-label btn-sm mb-0 col-4">
+                                      <input type="radio" name="options" id="c2-nv-on" autocomplete="off"> ON
+                                </label>
+                                <label onclick='$.post("/cool/cooler1/0")' id="cool1Off" class="btn btn-label btn-sm mb-0 col-4">
+                                      <input type="radio" name="options" id="c2-nv-off" autocomplete="off"> OFF
+                                </label>
+                            </div>
+                            <div class="info-holder info-ct">
+                                <div data-toggle="popover-all" data-content="Group of radio buttons." data-original-title="Option settings" data-placement="bottom" data-offset="0,-32"></div>
+                            </div>
+                        </li>
+					</div>
+					<!-- FAN Kitchen END -->
+				</div>
+				<div class="col-sm-12 col-md-6">
+					<!-- FAN Bathroom  START -->
+					<div class="card active" data-unit="fan-bathroom">
+						<!-- FAN Bathroom switch START -->
+						<ul class="list-group borderless">
+							<li class="list-group-item align-items-center">
+								<svg class="icon-sprite icon-1x">
+                        			<svg viewBox="0 0 64 64">
+                        				  <title>Fan</title>
+										  <desc>Fan symbol</desc>
+										  <g fill="currentColor">
+										    <path d="M32,10c-12.15,0-22,9.85-22,22c0,12.15,9.85,22,22,22c12.15,0,22-9.85,22-22C54,19.85,44.15,10,32,10z M32,52
+												c-11.05,0-20-8.95-20-20c0-11.05,8.95-20,20-20c11.05,0,20,8.95,20,20C52,43.05,43.05,52,32,52z"/>
+										    <path d="M50.01,30.22c-0.17-1.66-1.52-2.02-2.82-0.98c-2.63,2.09-5.31,3.43-8.26,3.74C38.97,32.66,39,32.33,39,32
+												c0-1.08-0.25-2.11-0.7-3.03c3.19-2.31,5.35-5.51,4.76-9.05c-1.01-6.04-9.65-6.26-12.84-5.94c-1.66,0.17-2.02,1.52-0.98,2.82
+												c2.09,2.63,3.43,5.31,3.74,8.26C32.66,25.03,32.33,25,32,25c-1.09,0-2.11,0.25-3.03,0.69c-2.31-3.19-5.51-5.35-9.05-4.76
+												c-6.04,1.01-6.26,9.65-5.94,12.84c0.17,1.66,1.52,2.02,2.82,0.98c2.63-2.09,5.31-3.43,8.26-3.75C25.03,31.34,25,31.67,25,32
+												c0,1.08,0.25,2.11,0.69,3.03c-3.19,2.31-5.35,5.51-4.76,9.05c1.01,6.04,9.65,6.25,12.84,5.94c1.66-0.17,2.02-1.52,0.98-2.82
+												c-2.09-2.63-3.43-5.31-3.75-8.26C31.34,38.97,31.67,39,32,39c1.08,0,2.11-0.25,3.03-0.7c2.31,3.19,5.51,5.35,9.05,4.76
+												C50.11,42.06,50.33,33.42,50.01,30.22z M27,32c0-2.76,2.24-5,5-5c2.76,0,5,2.24,5,5c0,2.76-2.24,5-5,5C29.24,37,27,34.76,27,32z"/>
+										    <circle cx="32" cy="32" r="3"/>
+										  </g>
+                        			</svg>
+                      			</svg>
+								<h5>Cooler 2</h5>
+								<label class="switch ml-auto checked">
+                        			<input type="checkbox" id="fan-bathroom" checked>
+                      			</label>
+							</li>
+						</ul>
+						<!-- FAN Bathroom switch END -->
+						<div class="only-if-active">
+							<hr class="my-0">
+							<ul class="list-group borderless px-1">
+								<li class="list-group-item pb-0">
+									<p class="specs">Connection</p>
+									<p class="ml-auto mb-0 text-success">OK</p>
+								</li>
+							</ul>
+							<!-- Speed control - range slider START -->
+							<ul class="list-group borderless px-1" data-rangeslider="fan-02">
+								<li class="list-group-item">
+									<p class="specs">Speed</p>
+									<p class="ml-auto mb-0"><span class="range-output">3</span></p>
+								</li>
+								<li class="list-group-item pt-0 pb-4">
+									<input id="fan-02" class="fanspeed" type="range" min="1" max="6" value="3">
+								</li>
+							</ul>
+							<!-- Speed control - range slider END -->
+                        </div>
+                                                <li class="list-group-item flex-column py-2">
+                            <p class="specs w-100">State</p>
+                            <div class="btn-group btn-group-toggle w-100 py-2" data-toggle="buttons">
+                                <label onclick='$.post("/cool/cooler2/2")' id="cool2Auto" class="btn btn-label btn-sm mb-0 col-4 active">
+                                      <input type="radio" name="options" id="c2-nv-auto" autocomplete="off" checked> AUTO
+                                </label>
+                                <label onclick='$.post("/cool/cooler2/1")' id="cool2On" class="btn btn-label btn-sm mb-0 col-4">
+                                      <input type="radio" name="options" id="c2-nv-on" autocomplete="off"> ON
+                                </label>
+                                <label onclick='$.post("/cool/cooler2/0")' id="cool2Off" class="btn btn-label btn-sm mb-0 col-4">
+                                      <input type="radio" name="options" id="c2-nv-off" autocomplete="off"> OFF
+                                </label>
+                            </div>
+                            <div class="info-holder info-ct">
+                                <div data-toggle="popover-all" data-content="Group of radio buttons." data-original-title="Option settings" data-placement="bottom" data-offset="0,-32"></div>
+                            </div>
+                        </li>
+					</div>
+					<!-- FAN Bathroom END -->
+				</div>
+				</div>
+				<hr class="my-2">
+				<!-- Outdoor temperature graph START -->
+
+		<!-- Main content END -->
+		<!-- Bottom navbar START -->
+		<!-- Bottom navbar END -->
+
+
+
+	</div>
+	<!-- Wrapper END -->
+
+	<!-- FAB button - bottom right on large screens -->
+
+	<!-- jQuery -->
+	<script src="http://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+	<script src="static/assets/js/datapic.js" type="text/javascript"></script>
+	<link rel="stylesheet" type="text/css" href="static/assets/css/bootstrap-datetimepicker-standalone.css">
+	<link rel="stylesheet" type="text/css" href="static/assets/css/bootstrap-datetimepicker-standalone.min.css">
+	<link rel="stylesheet" type="text/css" href="static/assets/css/bootstrap-datetimepicker-standalone.min.css.map">
+	<link rel="stylesheet" type="text/css" href="static/assets/css/bootstrap-datetimepicker.css">
+	<link rel="stylesheet" type="text/css" href="static/assets/css/bootstrap-datetimepicker.min.css">
+
+	<!-- Bootstrap bundle -->
+	<script src="static/assets/js/bootstrap.bundle.min.js"></script>
+
+	<!-- Cross browser support for SVG icon sprites -->
+	<script src="static/assets/js/svg4everybody.min.js"></script>
+
+	<!-- jQuery range-slider plugin (Dimmers, Fridge temperature) -->
+	<script src="static/assets/js/iot-range-slider.min.js"></script>
+
+	<!-- Basic theme functionality (arming, garage doors, switches ...) - using jQuery -->
+	<script src="static/assets/js/iot-functions.min.js"></script>
+
+	<!-- Chartist.js library - NO jQuery dependency -->
+	<script src="static/assets/js/chartist.min.js"></script>
+
+	        <script type="text/javascript">
+            $(function () {
+                $('#datetimepicker1').datetimepicker();
+            });
+        </script>
+
+	<script>
+		var temps;
+		$(document).ready(function() {
+
+
+			// Get checkbox statuses from localStorage if available (IE)
+			if (localStorage) {
+
+				// Switch statuses
+				var switchValues = JSON.parse(localStorage.getItem('switchValues')) || {};
+
+				$.each(switchValues, function(key, value) {
+
+					// Apply only if element is included on the page
+					if ($('[data-unit="' + key + '"]').length) {
+
+						if (value === true) {
+
+							// Apply appearance of the "unit" and checkbox element
+							$('[data-unit="' + key + '"]').addClass("active");
+							$("#" + key).prop('checked', true);
+							$("#" + key).closest("label").addClass("checked");
+
+						} else {
+							$('[data-unit="' + key + '"]').removeClass("active");
+							$("#" + key).prop('checked', false);
+							$("#" + key).closest("label").removeClass("checked");
+
+						}
+					}
+				});
+
+				// Range Slider values
+				var rangeValues = JSON.parse(localStorage.getItem('rangeValues')) || {};
+
+				$.each(rangeValues, function(key, value) {
+
+					// Apply only if element is included on the page
+					if ($('[data-rangeslider="' + key + '"]').length) {
+
+						var rangeKey = key.slice(0, -3);
+
+						if (rangeKey === 'room-temp') {
+							// Update Range slider - special case Room
+							var temperatureFar = value;
+							var temperatureCel = (temperatureFar - 32) * 5 / 9;
+							var roundCel = Number(Math.round(temperatureCel + 'e2') + 'e-2');
+							$('[data-rangeslider="' + key + '"] .room-temp-F').html(temperatureFar);
+							$('[data-rangeslider="' + key + '"] .room-temp-C').html(roundCel);
+
+							// If room temperature is lower than desired (71.6 F) - activate it
+							//$.post("/cool/radTempSet/" + parseInt(temperatureCel));
+							if (temperatureFar > 71.59) {
+								$('[data-unit="' + key + '"]').addClass("active");
+							} else {
+								$('[data-unit="' + key + '"]').removeClass("active");
+							}
+
+							// Update Range slider - universal
+							$('[data-rangeslider="' + key + '"] input[type="range"]').val(value);
+							$('[data-rangeslider="' + key + '"] .range-output').html(value);
+
+						} else {
+							// Update Range slider - universal
+							$('[data-rangeslider="' + key + '"] input[type="range"]').val(value);
+							$('[data-rangeslider="' + key + '"] .range-output').html(value);
+						}
+					}
+				});
+
+			}
+
+
+			// Switch (checkbox element) toogler
+			$('.switch input[type="checkbox"]').on("change", function(t) {
+
+				// Check the time between changes to prevert Android native browser execute twice
+				// If you dont need support for Android native browser - just call "switchSingle" function
+				if (this.last) {
+
+					this.diff = t.timeStamp - this.last;
+
+					// Don't execute if the time between changes is too short (less than 250ms) - Android native browser "twice bug"
+					// The real time between two human taps/clicks is usually much more than 250ms"
+					if (this.diff > 250) {
+
+						this.last = t.timeStamp;
+
+						iot.switchSingle(this.id, this.checked);
+
+					} else {
+						return false;
+					}
+
+				} else {
+
+					// First attempt on this switch element
+					this.last = t.timeStamp;
+
+					iot.switchSingle(this.id, this.checked);
+
+				}
+			});
+
+			// Reposition to center when a modal is shown
+			$('.modal.centered').on('show.bs.modal', iot.centerModal);
+
+			// Alerts "Close" callback - hide modal and alert indicator dot when user closes all alerts
+			$('#alertsModal .alert').on('close.bs.alert', function() {
+				var sum = $('#alerts-toggler').attr('data-alerts');
+				sum = sum - 1;
+				$('#alerts-toggler').attr('data-alerts', sum);
+
+				if (sum === 0) {
+					$('#alertsModal').modal('hide');
+					$('#alerts-toggler').attr('data-toggle', 'none');
+				}
+			});
+
+			// Show/hide tips (popovers) - FAB button (right bottom on large screens)
+			$('#info-toggler').click(function() {
+
+				if ($('body').hasClass('info-active')) {
+					$('[data-toggle="popover-all"]').popover('hide');
+					$('body').removeClass('info-active');
+				} else {
+					$('[data-toggle="popover-all"]').popover('show');
+					$('body').addClass('info-active');
+				}
+			});
+
+			// Hide tips (popovers) by clicking outside
+			$('body').on('click', function(pop) {
+
+				if (pop.target.id !== 'info-toggler' && $('body').hasClass('info-active')) {
+					$('[data-toggle="popover-all"]').popover('hide');
+					$('body').removeClass('info-active');
+				}
+
+			});
+
+			// Data binding for numeric representation of Room temperature range slider
+			$(document).on('input', 'input[type="range"].room-temp', function() {
+				var temperatureFar = this.value;
+				var temperatureCel = (temperatureFar - 32) * 5 / 9;
+				var roundCel = Number(Math.round(temperatureCel + 'e2') + 'e-2');
+				$('[data-rangeslider="' + this.id + '"] .room-temp-F').html(temperatureFar);
+				$('[data-rangeslider="' + this.id + '"] .room-temp-C').html(roundCel);
+
+				// If room temperature is lower than desired (71.6 F) - activate it
+				if (temperatureFar > 71.59) {
+					$('[data-unit="' + this.id + '"]').addClass("active");
+				} else {
+					$('[data-unit="' + this.id + '"]').removeClass("active");
+				}
+			});
+
+			// Data binding for numeric representation of Fan speed range slider
+			$(document).on('input', 'input[type="range"].fanspeed', function() {
+				$('[data-rangeslider="' + this.id + '"] .range-output').html(this.value);
+			});
+
+
+			// Charts initializaton - Chartist.js
+			var data02 = {
+				// Labels array that can contain any sort of values
+				labels: ['1:00', '2:00', '3:00', '4:00', '5:00', '6:00', '7:00', '8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'],
+				// Series array that contains series objects or in this case series data arrays
+				series: [
+					[8, -7, -6, -4, -1, 1, 2, 4, 5, 4, 3, 20]
+				]
+			};
+			
+
+
+				var ResizeTimer;
+
+
+			    // Call your function on DOM ready / Trigger resize
+			    $(window).trigger('resize');
+
+			var responsive_steps02 = [
+				// Show only every second label
+				['screen and (max-width: 768px)', {
+					axisX: {
+						labelInterpolationFnc: function skipLabels(value, index, labels) {
+							return index % 2 === 0 ? value : null;
+						}
+					}
+				}],
+				// Show only every fourth label
+				['screen and (max-width: 480px)', {
+					axisX: {
+						labelInterpolationFnc: function skipLabels(value, index, labels) {
+							return index % 4 === 0 ? value : null;
+						}
+					}
+				}]
+			];
+
+			$(window).on("resize", function(){
+			        clearTimeout(ResizeTimer);
+			        ResizeTimer = setTimeout(function(){
+
+			        // Add your functions here
+			        
+			        if($(window).width() > 1200){
+			        	console.log(1);
+					options02 = {
+						height: 240,
+						high: 20,
+						low: -20,
+						scaleMinSpace: 12,
+						onlyInteger: false,
+						referenceValue: 0
+					};
+								new Chartist.Bar('#chart02', data02, options02, responsive_steps02)
+				.on('draw', function(data02) {
+					if (data02.type === 'bar' && data02.value.y < 0) {
+						data02.element.attr({
+							class: 'ct-bar negative'
+						});
+					}
+				});
+				}
+					else{
+						console.log(2);
+					options02 = {
+						height: 240,
+						width: 1200,
+						high: 20,
+						low: -20,
+						scaleMinSpace: 12,
+						onlyInteger: false,
+						referenceValue: 0
+					};
+								new Chartist.Bar('#chart02', data02, options02, responsive_steps02)
+				.on('draw', function(data02) {
+					if (data02.type === 'bar' && data02.value.y < 0) {
+						data02.element.attr({
+							class: 'ct-bar negative'
+						});
+					}
+				});
+					}
+			          //if (wH == 1024 && wW == 768) {
+			           ///      alert("please flip");
+			         /// }
+
+			       // wait for 200ms between each resize event
+			        },200); 
+			    });
+
+			new Chartist.Bar('#chart02', data02, options02, responsive_steps02)
+				.on('draw', function(data02) {
+					if (data02.type === 'bar' && data02.value.y < 0) {
+						data02.element.attr({
+							class: 'ct-bar negative'
+						});
+					}
+				});
+
+			// Initialize a Bar chart in the container with the ID chart01
+
+
+		});
+
+		// Apply necessary changes, functionality when content is loaded
+		$(window).on('load', function() {
+
+			// This script is necessary for cross browsers icon sprite support (IE9+, ...) 
+			svg4everybody();
+
+			// "Timeout" function is not neccessary - important is to hide the preloader overlay
+			setTimeout(function() {
+
+				// Hide preloader overlay when content is loaded
+				$('#iot-preloader,.card-preloader').fadeOut();
+				$("#wrapper").removeClass("hidden");
+
+				// Initialize range sliders
+				$('input[type="range"]').rangeslider({
+					polyfill: false,
+					onSlideEnd: function(position, value) {
+
+						var rangeValues = JSON.parse(localStorage.getItem('rangeValues')) || {};
+						// Update localStorage
+						if (localStorage) {
+							rangeValues[this.$element[0].id] = value;
+							localStorage.setItem("rangeValues", JSON.stringify(rangeValues));
+						}
+					}
+
+				});
+
+				// Check for Main contents scrollbar visibility and set right position for FAB button
+				document.getElementById("js-rangeslider-1").onclick = function(){
+							console.log(document.getElementById("roomTempCel").innerHTML);
+							$.post("/cool/radTempSet/" + parseInt(document.getElementById("roomTempCel").innerHTML));
+						}
+				iot.positionFab();
+
+			}, 800);
+
+		});
+
+		// Apply necessary changes if window resized
+		$(window).on('resize', function() {
+
+			// Modal reposition when the window is resized
+			$('.modal.centered:visible').each(iot.centerModal);
+
+			// Check for Main contents scrollbar visibility and set right position for FAB button
+            iot.positionFab();
+            $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+
+            (function(){
+
+                $.getJSON(
+                    $SCRIPT_ROOT+"/sendMainData", // Your AJAX route here
+                    function(sendMainData) {
+                        console.log(sendMainData);
+                        document.getElementById("radTemp").innerHTML = sendMainData["radTemp"] + "<sup>°C</sup>";
+						document.getElementById("roomTemp").innerHTML = sendMainData["roomTemp"] + "<sup>°C</sup>";
+                        if(sendMainData["cooler1"] == 0){
+                            document.getElementById("cool1Auto").className = "btn btn-label btn-sm mb-0 col-4";
+                            document.getElementById("cool1On").className = "btn btn-label btn-sm mb-0 col-4";
+                            document.getElementById("cool1Off").className = "btn btn-label btn-sm mb-0 col-4 active";
+                        }
+                        if(sendMainData["cooler1"] == 1){
+                            document.getElementById("cool1Auto").className = "btn btn-label btn-sm mb-0 col-4";
+                            document.getElementById("cool1On").className = "btn btn-label btn-sm mb-0 col-4 active";
+                            document.getElementById("cool1Off").className = "btn btn-label btn-sm mb-0 col-4";
+                        }
+                        if(sendMainData["cooler1"] == 2){
+                            document.getElementById("cool1Auto").className = "btn btn-label btn-sm mb-0 col-4 active";
+                            document.getElementById("cool1On").className = "btn btn-label btn-sm mb-0 col-4";
+                            document.getElementById("cool1Off").className = "btn btn-label btn-sm mb-0 col-4";
+                        }
+                        if(sendMainData["cooler2"] == 0){
+                            document.getElementById("cool2Auto").className = "btn btn-label btn-sm mb-0 col-4";
+                            document.getElementById("cool2On").className = "btn btn-label btn-sm mb-0 col-4";
+                            document.getElementById("cool2Off").className = "btn btn-label btn-sm mb-0 col-4 active";
+                        }
+                        if(sendMainData["cooler2"] == 1){
+                            document.getElementById("cool2Auto").className = "btn btn-label btn-sm mb-0 col-4";
+                            document.getElementById("cool2On").className = "btn btn-label btn-sm mb-0 col-4 active";
+                            document.getElementById("cool2Off").className = "btn btn-label btn-sm mb-0 col-4";
+                        }
+                        if(sendMainData["cooler2"] == 2){
+                            document.getElementById("cool2Auto").className = "btn btn-label btn-sm mb-0 col-4 active";
+                            document.getElementById("cool2On").className = "btn btn-label btn-sm mb-0 col-4";
+                            document.getElementById("cool2Off").className = "btn btn-label btn-sm mb-0 col-4";
+                        }
+                    });
+				})();
+		});
+
+
+
+	</script>
+
+<script>
+    
+	
+
+</script>
+
+<style type="text/css">
+	/* width */
+::-webkit-scrollbar {
+ 	width: 10px; 
+  height: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888; 
+  border-radius: 17%;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+</style>
+
+</body>
+
+</html>

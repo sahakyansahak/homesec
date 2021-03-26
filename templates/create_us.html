@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Create User</title>
+	 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+</head>
+<body>
+	<h3>Hi, dear User please Create account for you</h3>
+
+	<form method="POST" enctype="multipart/form-data" action="{{ url_for('new_us') }}">
+		<input type="text" name="uname" id="uname">
+		<input type="text" name="pass" id="pass">
+		<input type="text" name="card" id="card">
+		<input type="file" name="file[]"  multiple="">
+		<input type="submit" id="addcard"  name="signup_submit"­­ value="Register" />
+    </form>
+	
+	<form id="home" action="home"></form>
+</body>
+	<script type="text/javascript">
+		/*
+		function regist(){alert("a");
+			if(document.getElementById("uname").value.length > 4){
+				if(document.getElementById("pass").value.length > 4){
+					if(document.getElementById("card").value.length > 5){
+						$.post("/new_us/" + document.getElementById("uname").value + "/" + document.getElementById("pass").value + "/" + document.getElementById("card").value)
+						setTimeout(go_page, 1500);
+					}
+					else{alert("Card ID can`t be less then 6 symbols")}
+				}
+				else{alert("Please Select 5+ pass")}
+			}
+			else{alert("Please Select 5+ uname")}
+		}
+
+		function go_page(){document.getElementById("home").submit();}
+*/
+	</script>
+</html>
